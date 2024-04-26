@@ -14,15 +14,13 @@ function App() {
     const userInput = event.target.textContent;  
     
     const arrayOutput = output.split('');
-    console.log(arrayOutput[0][length - 1])
+    const lastElement = arrayOutput[arrayOutput.length-1];
     if(output === '0'){
       setOutput(userInput)
       //forbid to add zeroes to a number beginning with zero
-    } else if(arrayOutput[arrayOutput.length-1].includes('.') && userInput === '0' && !isNaN(arrayOutput[0][length - 1])){
-      console.log(arrayOutput)
+    } else if(lastElement.includes('.') && userInput === '0' && !isNaN(arrayOutput[length - 1])){
         return;
-    } else if(arrayOutput[arrayOutput.length-1].length === 0 && userInput === '0'){
-      console.log("fsfx1")
+    } else if(lastElement.length === 0 && userInput === '0'){
       return;
     }
     else {
@@ -37,11 +35,9 @@ function App() {
 
   function addDecimalToOutput(){
     const arrayOutput = output.split(' ');
-    console.log(arrayOutput)
     const lastElement = arrayOutput[arrayOutput.length-1]
-    console.log(arrayOutput)
+
     if(lastElement === "0"){
-      
       return;
     }else if(!lastElement.includes('.') && !isNaN(parseInt(lastElement))){
       setOutput(prevOutput => prevOutput + '.')
@@ -49,26 +45,19 @@ function App() {
   }
 
   function calculateResult(){
-    
+    //filter expression for excess operations
     const arrayOutput = output.split(' ');
-    //console.log(arrayOutput)
-    const newArray = [];
     let isLastCharExp = false;
     let lastCharExp = '';
     let isCurrentCharExp = false;
-    let isLastCharNum = false;
     let isCurrentCharNum = false;
     const regex1 = /[+\-*/]/
     const regex2 = /[0-9]/;
-    const regex3 = /[+*/]/
-    //check if last char is operation
+   
+    
     for(let i = arrayOutput.length - 1; i >= 0 ;i--){
       isCurrentCharExp = regex1.test(arrayOutput[i])
       isCurrentCharNum = regex2.test(arrayOutput[i])
-      
-      console.log("Current char exp " +isCurrentCharExp)
-      console.log("isCurrentCharNum " +isCurrentCharNum)
-      console.log("lastCharExp " +lastCharExp)
       
       if (isLastCharExp && isCurrentCharExp){
         if(lastCharExp === '-'){
@@ -83,26 +72,14 @@ function App() {
         isLastCharExp = false;
         lastCharExp = arrayOutput[i]
       }
-      console.log(arrayOutput)
     }
-    //console.log(arrayOutput)
-    /*
-    for(let i = arrayOutput.length - 1; i >= 0 ;i--){
-      
-      isCurrentCharExp = regex3.test(arrayOutput[i])
-      console.log(isCurrentCharNum)
-      if (isLastCharNum && isCurrentCharExp){
-        arrayOutput.splice(i, 1);
-      } else if(isCurrentCharNum){
-        isLastCharNum = true;
-      }
-    }*/
 
-    console.log(arrayOutput)
     let result = eval(arrayOutput.join(''));
     const resultToString = result.toString();
+    //check if result is decimal
     if(resultToString.includes(".")){
       const checkForDecimalPlaces = resultToString.split('.')
+      //round decimal to 4 places
       if(checkForDecimalPlaces[1].length > 4){
         result = Number(result.toFixed(4));
       }
